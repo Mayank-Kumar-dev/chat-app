@@ -1,20 +1,20 @@
-# Use the official Node.js 14 image as the base image
-FROM --platform=linux/amd64 node:18
+# Base image from AWS ECR Public (no rate limits)
+FROM public.ecr.aws/docker/library/node:18
 
-# Set the working directory inside the container
+# Set work directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
+# Copy dependency files first (better build caching)
 COPY package*.json ./
 
 # Install dependencies
 RUN npm install
 
-# Copy the rest of the application code to the working directory
+# Copy remaining source code
 COPY . .
 
-# Expose the port that your app runs on (change 3000 to your app's port if necessary)
+# Expose app port
 EXPOSE 3000
 
-# Command to run your application (change "npm start" to your actual start command)
+# Start command
 CMD ["node", "app.js"]
