@@ -1,9 +1,0 @@
-version: 1
-Resources:
-  - TargetService:
-      Type: AWS::ECS::Service
-      Properties:
-        TaskDefinition: "MAYANK"  # ECS Task Definition family name
-        LoadBalancerInfo:
-          ContainerName: "Mayank"
-          ContainerPort: 3000
