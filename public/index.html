@@ -1,106 +1,40 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mayank AI — Chat UI</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mayank AI</title>
   <style>
-    :root{
-      --bg:#0f1724; --panel:#0b1220; --muted:#94a3b8; --accent:#10b981; --bubble-user:#1e293b; --bubble-assist:#072f48; --glass: rgba(255,255,255,0.03);
-      --radius:12px; --gap:16px; --max-width:900px;
-      color-scheme: dark;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial; background:linear-gradient(180deg,#021022 0%, #061226 100%); color:#e6eef6}
-    .app{display:flex;gap:20px;max-width:calc(var(--max-width) + 360px);margin:28px auto;padding:20px}
-
-    .sidebar{width:320px;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);border-radius:var(--radius);padding:18px;flex-shrink:0}
-    .brand{display:flex;align-items:center;gap:12px;margin-bottom:14px}
-    .logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#0369a1);display:flex;align-items:center;justify-content:center;font-weight:700}
-    .brand h1{font-size:15px;margin:0}
-    .controls{display:flex;gap:10px;flex-wrap:wrap}
-    .btn{background:var(--glass);border:1px solid rgba(255,255,255,0.03);padding:8px 10px;border-radius:10px;color:var(--muted);cursor:pointer;font-size:13px}
-    .btn.primary{background:linear-gradient(90deg,var(--accent),#06b6d4);color:#002; font-weight:600}
-
-    .panel{flex:1;min-height:600px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border-radius:var(--radius);display:flex;flex-direction:column;overflow:hidden}
-    .chat-header{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.03)}
-    .header-left{display:flex;gap:12px;align-items:center}
-    .title{font-weight:600}
-    .subtitle{font-size:13px;color:var(--muted)}
-    .content{flex:1;overflow:auto;padding:20px;display:flex;flex-direction:column;gap:12px}
-
-    .msg{max-width:78%;padding:12px 14px;border-radius:12px;line-height:1.45}
-    .msg.user{align-self:flex-end;background:linear-gradient(180deg,var(--bubble-user),#0b1624);border:1px solid rgba(255,255,255,0.02);}
-    .msg.assistant{align-self:flex-start;background:linear-gradient(180deg,var(--bubble-assist),#022b3a);border:1px solid rgba(255,255,255,0.02);}
-    .meta{font-size:12px;color:var(--muted);margin-bottom:6px}
-
-    .composer{padding:12px;border-top:1px solid rgba(255,255,255,0.03);display:flex;gap:12px;align-items:center}
-    textarea{flex:1;min-height:48px;max-height:200px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:10px;border-radius:10px;color:inherit;resize:vertical}
-    .send{padding:10px 14px;border-radius:10px;border:none;background:linear-gradient(90deg,var(--accent),#06b6d4);color:#002;font-weight:600;cursor:pointer}
-
-    @media (max-width:980px){.app{padding:12px;flex-direction:column;max-width:94vw}.sidebar{width:100%}.panel{width:100%}}
-
-    .small{font-size:13px;color:var(--muted)}
-    .example{background:rgba(255,255,255,0.02);padding:10px;border-radius:8px;border:1px dashed rgba(255,255,255,0.02);font-size:13px}
+    body { margin: 0; background: #f7f7f8; font-family: Arial, sans-serif; display: flex; height: 100vh; }
+    #sidebar { width: 260px; background: #fff; border-right: 1px solid #ddd; padding: 20px; }
+    #sidebar h2 { margin-top: 0; }
+    #main { flex: 1; display: flex; flex-direction: column; }
+    #header { padding: 15px; background: #fff; border-bottom: 1px solid #ddd; font-size: 20px; font-weight: bold; }
+    #content { flex: 1; padding: 20px; overflow-y: auto; }
+    .msg { margin-bottom: 20px; padding: 12px; border-radius: 10px; max-width: 80%; background: #fff; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
+    .msg.user { background: #d9f0ff; margin-left: auto; }
+    .meta { font-size: 13px; color: gray; margin-bottom: 5px; }
+    #inputBox { padding: 15px; display: flex; gap: 10px; background: #fff; border-top: 1px solid #ddd; }
+    #input { flex: 1; padding: 12px; font-size: 15px; border: 1px solid #ccc; border-radius: 8px; resize: none; }
+    #sendBtn { padding: 12px 20px; background: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
   </style>
 </head>
 <body>
-  <div class="app">
-    <aside class="sidebar">
-      <div class="brand">
-        <div class="logo">MA</div>
-        <div>
-          <h1>Mayank AI</h1>
-          <div class="small">Personal AI • Powered by OpenAI</div>
-        </div>
-      </div>
 
-      <div style="margin-bottom:12px">
-        <div class="small" style="margin-bottom:6px">Quick prompts</div>
-        <div class="controls">
-          <button class="btn" data-prompt="Explain cloud computing like I'm 5">Explain Cloud</button>
-          <button class="btn" data-prompt="Write a professional email for status update">Write Email</button>
-          <button class="btn" data-prompt="Give me DevOps interview questions">DevOps Questions</button>
-        </div>
-      </div>
+  <div id="sidebar">
+    <h2>Mayank AI</h2>
+    <p>Smart • Fast • Personal</p>
+  </div>
 
-      <div style="margin-top:10px">
-        <div class="small" style="margin-bottom:6px">Settings</div>
-        <div style="display:flex;gap:8px;align-items:center">
-          <button class="btn" id="clearBtn">Clear chat</button>
-          <button class="btn" id="copyBtn">Copy all</button>
-        </div>
-      </div>
+  <div id="main">
+    <div id="header">Mayank AI</div>
 
-      <div style="margin-top:18px" class="small example">
-        Tip: This chat uses a real OpenAI model. Enter your API key inside the script section.
-      </div>
-    </aside>
+    <div id="content"></div>
 
-    <main class="panel">
-      <div class="chat-header">
-        <div class="header-left">
-          <div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#0ea5a6,#7c3aed);display:flex;align-items:center;justify-content:center;font-weight:700">AI</div>
-          <div>
-            <div class="title">Mayank AI</div>
-            <div class="subtitle">Your personal smart assistant</div>
-          </div>
-        </div>
-        <div class="small">v1.0</div>
-      </div>
-
-      <div class="content" id="content">
-        <div class="msg assistant" id="welcome">
-          <div class="meta">Assistant • just now</div>
-          <div>Hi Mayank! 👋 I'm your personal AI. Ask me anything!</div>
-        </div>
-      </div>
-
-      <div class="composer">
-        <textarea id="input" placeholder="Type a message... (Enter to send)"></textarea>
-        <button class="send" id="sendBtn">Send</button>
-      </div>
-    </main>
+    <div id="inputBox">
+      <textarea id="input" rows="2" placeholder="Ask Mayank AI..."></textarea>
+      <button id="sendBtn">Send</button>
+    </div>
   </div>
 
 <script>
@@ -108,58 +42,69 @@
   const input = document.getElementById('input');
   const sendBtn = document.getElementById('sendBtn');
 
-  // 🔥 Add your OpenAI key here
-  const API_KEY = "YOUR_OPENAI_KEY_HERE";
-
-  function appendMessage(role, text){
+  function appendMessage(role, text) {
     const el = document.createElement('div');
     el.className = 'msg ' + (role === 'user' ? 'user' : 'assistant');
-    const meta = document.createElement('div'); meta.className = 'meta'; meta.textContent = (role === 'user' ? 'You' : 'Mayank AI') + ' • just now';
-    const body = document.createElement('div'); body.innerHTML = text.replace(/\n/g,'<br>');
-    el.appendChild(meta); el.appendChild(body);
+
+    const meta = document.createElement('div');
+    meta.className = 'meta';
+    meta.textContent = (role === 'user' ? 'You' : 'Mayank AI') + ' • now';
+
+    const body = document.createElement('div');
+    body.innerHTML = text.replace(/
+/g, "<br>");
+
+    el.appendChild(meta);
+    el.appendChild(body);
     content.appendChild(el);
+
     content.scrollTop = content.scrollHeight;
   }
 
-  async function realReply(userText){
-    const loading = document.createElement('div');
-    loading.className = 'msg assistant';
-    loading.innerHTML = '<div class="meta">Mayank AI • typing…</div><div>▮▮▮</div>';
-    content.appendChild(loading);
+  // DEMO MODE — no API key needed
+  async function realReply(userText) {
+    const loader = document.createElement('div');
+    loader.className = 'msg assistant';
+    loader.innerHTML = '<div class="meta">Mayank AI • typing…</div><div>▮▮▮</div>';
+    content.appendChild(loader);
     content.scrollTop = content.scrollHeight;
 
-    try{
-      const res = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer " + API_KEY
-        },
-        body: JSON.stringify({
-          model: "gpt-4.1-mini",
-          messages: [ { role: "user", content: userText } ]
-        })
-      });
+    await new Promise(r => setTimeout(r, 700));
 
-      const data = await res.json();
-      loading.remove();
-      const reply = data.choices?.[0]?.message?.content || "No response received.";
-      appendMessage('assistant', reply);
+    loader.remove();
 
-    }catch(err){
-      loading.remove();
-      appendMessage('assistant', '⚠️ Error: ' + err.message);
+    // Smart fake replies
+    let reply = "";
+
+    if (userText.toLowerCase().includes("hi") || userText.toLowerCase().includes("hello")) {
+      reply = "Hi Mayank! 👋 How can I help you today?";
+    } else if (userText.toLowerCase().includes("name")) {
+      reply = "I'm Mayank AI — your personal smart assistant!";
+    } else if (userText.toLowerCase().includes("aws") || userText.toLowerCase().includes("devops")) {
+      reply = "I can help you with AWS, DevOps, Terraform, Docker, CI/CD and more. Ask anything!";
+    } else {
+      reply = "This is demo mode 😄 Add an API key later for real AI responses.";
     }
+
+    appendMessage("assistant", reply);
   }
 
-  function send(){
+  function send() {
     const text = input.value.trim();
-    if(!text) return;
-    appendMessage('user', text);
-    input.value='';
+    if (!text) return;
+
+    appendMessage("user", text);
+    input.value = "";
     realReply(text);
   }
 
-  sendBtn.addEventListener('click', send);
-  input.addEventListener('keydown', (e)=>{
-    if(e.key === 'Enter' && !e
+  sendBtn.addEventListener("click", send);
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      send();
+    }
+  });
+</script>
+</body>
+</html>
