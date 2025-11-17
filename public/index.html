@@ -1,129 +1,191 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mayank AI</title>
-
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mayank — Personal Splash</title>
   <style>
-    body { margin:0; display:flex; height:100vh; background:#f5f5f7; font-family:Arial; }
-
-    #sidebar {
-      width:260px; background:white; border-right:1px solid #ddd;
-      padding:20px; font-size:20px; font-weight:bold;
+    :root{
+      --bg1:#0f1724; /* dark navy */
+      --bg2:#08121b;
+      --accent1:#7c3aed; /* purple */
+      --accent2:#06b6d4; /* teal */
+      --glass: rgba(255,255,255,0.06);
+      --card: rgba(255,255,255,0.04);
+      --glass-border: rgba(255,255,255,0.08);
+      --text: #e6eef8;
     }
-    #sidebar p { font-size:14px; font-weight:normal; }
-
-    #main { flex:1; display:flex; flex-direction:column; }
-
-    #header {
-      height:60px; background:#fff; border-bottom:1px solid #ddd;
-      display:flex; align-items:center; padding-left:20px;
-      font-size:22px; font-weight:bold;
-    }
-
-    #content {
-      flex:1; padding:25px; overflow-y:auto;
-    }
-
-    .msg {
-      background:#fff; padding:12px 15px; border-radius:10px;
-      max-width:70%; margin-bottom:20px; box-shadow:0 1px 3px rgba(0,0,0,0.1);
-    }
-    .user { background:#d9edff; margin-left:auto; }
-
-    .meta { color:#666; font-size:13px; margin-bottom:5px; }
-
-    #inputBox {
-      display:flex; gap:10px; padding:15px; border-top:1px solid #ddd;
-      background:white;
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial}
+    body{
+      background: radial-gradient(1200px 600px at 10% 20%, rgba(124,58,237,0.12), transparent 8%),
+                  radial-gradient(900px 400px at 90% 80%, rgba(6,182,212,0.08), transparent 8%),
+                  linear-gradient(180deg,var(--bg1),var(--bg2));
+      color:var(--text);
+      display:flex;align-items:center;justify-content:center;padding:32px;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
     }
 
-    #input {
-      flex:1; padding:12px; border:1px solid #ccc; border-radius:8px;
-      font-size:16px;
+    .stage{
+      width:100%;max-width:980px;display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:center;
     }
 
-    #sendBtn {
-      width:100px; background:#007bff; color:white; font-weight:bold;
-      border:none; border-radius:8px; cursor:pointer;
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border:1px solid var(--glass-border);
+      border-radius:16px;padding:40px;backdrop-filter: blur(8px);
+      box-shadow: 0 10px 30px rgba(2,6,23,0.5);
     }
 
-    #sendBtn:hover { background:#0068d6; }
+    .hero{
+      padding:12px 18px;
+    }
+
+    .name-wrap{
+      display:flex;align-items:baseline;gap:18px;flex-wrap:wrap
+    }
+
+    h1{
+      margin:0;font-size:64px;line-height:0.9;letter-spacing:-1px;
+      font-weight:800;color:transparent;background:linear-gradient(90deg,var(--accent1),var(--accent2));-webkit-background-clip:text;background-clip:text;
+      text-shadow: 0 6px 30px rgba(6,6,10,0.4);
+    }
+
+    .tagline{
+      margin-top:8px;color:rgba(230,238,248,0.8);font-size:18px
+    }
+
+    .typewriter{
+      color:rgba(230,238,248,0.85);font-weight:600;margin-top:18px;
+    }
+
+    .meta{margin-top:22px;display:flex;gap:10px;flex-wrap:wrap}
+
+    .pill{padding:8px 12px;border-radius:999px;background:var(--glass);border:1px solid var(--glass-border);font-size:13px}
+
+    .actions{margin-top:24px;display:flex;gap:10px}
+    button.btn{
+      border:0;padding:12px 16px;border-radius:10px;font-weight:700;cursor:pointer;background:linear-gradient(90deg,var(--accent1),var(--accent2));color:white;box-shadow:0 8px 30px rgba(124,58,237,0.14);
+    }
+    button.ghost{background:transparent;border:1px solid var(--glass-border);color:var(--text)}
+
+    /* Right column preview */
+    .preview{
+      padding:26px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.04);
+      display:flex;flex-direction:column;align-items:center;gap:16px;min-height:260px;justify-content:center
+    }
+
+    .avatar{
+      width:120px;height:120px;border-radius:999px;display:grid;place-items:center;font-size:42px;font-weight:800;background:linear-gradient(135deg,var(--accent1),var(--accent2));box-shadow:0 8px 30px rgba(2,6,23,0.6);
+    }
+
+    .preview p{margin:0;color:rgba(230,238,248,0.8);text-align:center}
+
+    footer{margin-top:18px;font-size:13px;color:rgba(230,238,248,0.6)}
+
+    /* floating blobs */
+    .blobs{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:0}
+    .blob{position:absolute;border-radius:999px;filter:blur(40px);opacity:0.12}
+    .blob.a{width:420px;height:420px;background:linear-gradient(90deg,var(--accent1),var(--accent2));left:-260px;top:-120px}
+    .blob.b{width:300px;height:300px;background:linear-gradient(90deg,#06b6d4,#7c3aed);right:-160px;bottom:-180px}
+
+    /* responsive */
+    @media (max-width:920px){
+      .stage{grid-template-columns:1fr;}
+      h1{font-size:48px}
+      .avatar{width:96px;height:96px;font-size:34px}
+    }
   </style>
 </head>
 <body>
-
-  <div id="sidebar">
-    Mayank AI
-    <p>Smart • Fast • Personal</p>
+  <div class="blobs" aria-hidden>
+    <div class="blob a"></div>
+    <div class="blob b"></div>
   </div>
 
-  <div id="main">
-    <div id="header">Mayank AI</div>
+  <div class="stage">
+    <div class="card hero">
+      <div class="name-wrap">
+        <h1 id="name">Mayank</h1>
+        <div class="pill">Creative DevOps • Cloud</div>
+      </div>
+      <p class="tagline">A small interactive splash page — pretty, fast, and keyboard-friendly.</p>
 
-    <div id="content"></div>
+      <div class="typewriter" id="type"></div>
 
-    <div id="inputBox">
-      <input id="input" type="text" placeholder="Ask something..." />
-      <button id="sendBtn">Send</button>
+      <div class="meta">
+        <div class="pill">Mumbai, India</div>
+        <div class="pill">Docker • AWS • Terraform</div>
+        <div class="pill">20 yrs • Lifelong learner</div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="copyBtn">Copy Name</button>
+        <button class="ghost" id="themeBtn">Toggle Motion</button>
+      </div>
+
+      <footer>Tip: Press <kbd>c</kbd> to copy, <kbd>t</kbd> to toggle motion.</footer>
     </div>
+
+    <aside class="preview card" aria-label="preview">
+      <div class="avatar" id="avatar">M</div>
+      <p id="previewText">Hello — I am <strong>Mayank</strong>. Click copy to use my name, or press the keyboard shortcuts.</p>
+      <small style="opacity:0.6">This is a minimal, single-file page. Customize freely.</small>
+    </aside>
   </div>
 
-
-<script>
-  const content = document.getElementById("content");
-  const input = document.getElementById("input");
-  const sendBtn = document.getElementById("sendBtn");
-
-  function appendMessage(role, text) {
-      const box = document.createElement("div");
-      box.className = "msg " + (role === "user" ? "user" : "assistant");
-
-      const meta = document.createElement("div");
-      meta.className = "meta";
-      meta.innerText = (role === "user" ? "You" : "Mayank AI") + " • now";
-
-      const body = document.createElement("div");
-      body.innerHTML = text;
-
-      box.appendChild(meta);
-      box.appendChild(body);
-
-      content.appendChild(box);
-      content.scrollTop = content.scrollHeight;
-  }
-
-  function demoResponse(userText) {
-      let reply = "";
-
-      if (userText.toLowerCase().includes("cloud")) {
-          reply = "Cloud means storing and accessing data & services over the internet.";
-      } else if (userText.toLowerCase().includes("hi")) {
-          reply = "Hello Mayank 👋 How can I help?";
+  <script>
+    // typewriter
+    const phrases = [
+      'I build reliable cloud pipelines.',
+      'I dockerize apps and automate infra.',
+      'I learn daily and ship often.'
+    ];
+    let i=0,j=0;let forward=true;let paused=false;
+    const el = document.getElementById('type');
+    function tick(){
+      if(paused) return;
+      const str = phrases[i];
+      if(forward){
+        j++;
+        if(j>str.length){ forward=false; setTimeout(tick,1200); return; }
       } else {
-          reply = "This is demo mode. Add API key later for real AI.";
+        j--;
+        if(j<0){ forward=true; i=(i+1)%phrases.length; setTimeout(tick,300); return; }
       }
+      el.textContent = str.slice(0,j);
+      setTimeout(tick, forward?80:40);
+    }
+    tick();
 
-      appendMessage("assistant", reply);
-  }
+    // find avatar initial from name
+    const name = document.getElementById('name').textContent.trim();
+    document.getElementById('avatar').textContent = name.charAt(0).toUpperCase();
 
-  function sendMessage() {
-      const text = input.value.trim();
-      if (!text) return;
+    // copy name
+    const copyBtn = document.getElementById('copyBtn');
+    copyBtn.addEventListener('click', async ()=>{
+      try{ await navigator.clipboard.writeText(name); copyBtn.textContent='Copied!'; setTimeout(()=>copyBtn.textContent='Copy Name',1200);}catch(e){alert('Copy failed: '+e)}
+    });
 
-      appendMessage("user", text);
-      input.value = "";
+    // keyboard shortcuts
+    document.addEventListener('keydown',(e)=>{
+      if(e.key==='c' || e.key==='C'){ copyBtn.click(); }
+      if(e.key==='t' || e.key==='T'){ toggleMotion(); }
+    });
 
-      demoResponse(text);
-  }
+    // motion toggle
+    let motionOn = true;
+    const themeBtn = document.getElementById('themeBtn');
+    function toggleMotion(){ motionOn=!motionOn; paused = !motionOn; document.querySelector('.blobs').style.display = motionOn? 'block':'none'; themeBtn.textContent = motionOn? 'Toggle Motion':'Toggle Motion'; }
+    themeBtn.addEventListener('click', toggleMotion);
 
-  sendBtn.addEventListener("click", sendMessage);
-
-  input.addEventListener("keydown", function(e) {
-      if (e.key === "Enter") sendMessage();
-  });
-</script>
-
+    // interactive color on click
+    document.getElementById('name').addEventListener('click',()=>{
+      document.documentElement.style.setProperty('--accent1', '#ff6b6b');
+      document.documentElement.style.setProperty('--accent2', '#ffd166');
+    });
+  </script>
 </body>
 </html>
