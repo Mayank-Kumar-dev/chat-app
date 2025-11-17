@@ -1,9 +1,12 @@
 #!/bin/bash
 set -e
 
-ACCOUNT_ID="029799733507"
-REGION="ap-south-1"
-IMAGE=$(jq -r '.[0].imageUri' /opt/codedeploy-agent/deployment-root/*/*/deployment-archive/imagedefinitions.json)
+echo "Finding imagedefinitions.json..."
+JSON_PATH=$(find /opt/codedeploy-agent/deployment-root/ -name imagedefinitions.json -print -quit)
+
+echo "Using JSON at: $JSON_PATH"
+
+IMAGE=$(jq -r '.[0].imageUri' "$JSON_PATH")
 
 echo "Pulling latest image: $IMAGE"
 docker pull $IMAGE
