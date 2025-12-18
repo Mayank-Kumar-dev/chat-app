@@ -3,189 +3,255 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Mayank — Personal Splash</title>
+  <title>Mayank — DevOps & Cloud</title>
+
   <style>
     :root{
-      --bg1:#0f1724; /* dark navy */
-      --bg2:#08121b;
-      --accent1:#7c3aed; /* purple */
-      --accent2:#06b6d4; /* teal */
+      --bg1:#0b1220;
+      --bg2:#050a14;
+      --accent1:#7c3aed;
+      --accent2:#06b6d4;
       --glass: rgba(255,255,255,0.06);
-      --card: rgba(255,255,255,0.04);
-      --glass-border: rgba(255,255,255,0.08);
-      --text: #e6eef8;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial}
-    body{
-      background: radial-gradient(1200px 600px at 10% 20%, rgba(124,58,237,0.12), transparent 8%),
-                  radial-gradient(900px 400px at 90% 80%, rgba(6,182,212,0.08), transparent 8%),
-                  linear-gradient(180deg,var(--bg1),var(--bg2));
-      color:var(--text);
-      display:flex;align-items:center;justify-content:center;padding:32px;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
+      --border: rgba(255,255,255,0.1);
+      --text:#e6eef8;
     }
 
-    .stage{
-      width:100%;max-width:980px;display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:center;
+    *{box-sizing:border-box}
+    html,body{
+      height:100%;
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto;
+    }
+
+    body{
+      background:
+        radial-gradient(900px 500px at 10% 10%, rgba(124,58,237,.18), transparent 40%),
+        radial-gradient(700px 400px at 90% 90%, rgba(6,182,212,.18), transparent 45%),
+        linear-gradient(180deg,var(--bg1),var(--bg2));
+      color:var(--text);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:32px;
+      overflow:hidden;
+    }
+
+    .container{
+      max-width:1000px;
+      width:100%;
+      display:grid;
+      grid-template-columns:1fr 420px;
+      gap:28px;
+      animation: fadeUp .9s ease forwards;
+    }
+
+    @keyframes fadeUp{
+      from{opacity:0;transform:translateY(20px)}
+      to{opacity:1;transform:none}
     }
 
     .card{
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border:1px solid var(--glass-border);
-      border-radius:16px;padding:40px;backdrop-filter: blur(8px);
-      box-shadow: 0 10px 30px rgba(2,6,23,0.5);
-    }
-
-    .hero{
-      padding:12px 18px;
-    }
-
-    .name-wrap{
-      display:flex;align-items:baseline;gap:18px;flex-wrap:wrap
+      background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:36px;
+      backdrop-filter: blur(10px);
+      box-shadow:0 30px 60px rgba(0,0,0,.4);
     }
 
     h1{
-      margin:0;font-size:64px;line-height:0.9;letter-spacing:-1px;
-      font-weight:800;color:transparent;background:linear-gradient(90deg,var(--accent1),var(--accent2));-webkit-background-clip:text;background-clip:text;
-      text-shadow: 0 6px 30px rgba(6,6,10,0.4);
+      margin:0;
+      font-size:64px;
+      font-weight:900;
+      letter-spacing:-1px;
+      background:linear-gradient(90deg,var(--accent1),var(--accent2));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
     }
 
-    .tagline{
-      margin-top:8px;color:rgba(230,238,248,0.8);font-size:18px
+    .subtitle{
+      margin-top:10px;
+      font-size:18px;
+      color:rgba(230,238,248,.85);
     }
 
-    .typewriter{
-      color:rgba(230,238,248,0.85);font-weight:600;margin-top:18px;
+    .type{
+      margin-top:18px;
+      font-weight:600;
+      color:#fff;
+      min-height:24px;
     }
 
-    .meta{margin-top:22px;display:flex;gap:10px;flex-wrap:wrap}
-
-    .pill{padding:8px 12px;border-radius:999px;background:var(--glass);border:1px solid var(--glass-border);font-size:13px}
-
-    .actions{margin-top:24px;display:flex;gap:10px}
-    button.btn{
-      border:0;padding:12px 16px;border-radius:10px;font-weight:700;cursor:pointer;background:linear-gradient(90deg,var(--accent1),var(--accent2));color:white;box-shadow:0 8px 30px rgba(124,58,237,0.14);
+    .badges{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:22px;
     }
-    button.ghost{background:transparent;border:1px solid var(--glass-border);color:var(--text)}
 
-    /* Right column preview */
-    .preview{
-      padding:26px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.04);
-      display:flex;flex-direction:column;align-items:center;gap:16px;min-height:260px;justify-content:center
+    .badge{
+      padding:8px 14px;
+      border-radius:999px;
+      background:var(--glass);
+      border:1px solid var(--border);
+      font-size:13px;
+      transition:.2s;
+    }
+    .badge:hover{transform:translateY(-2px)}
+
+    .actions{
+      margin-top:26px;
+      display:flex;
+      gap:12px;
+    }
+
+    button{
+      padding:12px 18px;
+      border-radius:12px;
+      font-weight:700;
+      cursor:pointer;
+      border:0;
+    }
+
+    .primary{
+      background:linear-gradient(90deg,var(--accent1),var(--accent2));
+      color:#fff;
+      box-shadow:0 10px 30px rgba(124,58,237,.3);
+    }
+
+    .secondary{
+      background:transparent;
+      color:var(--text);
+      border:1px solid var(--border);
+    }
+
+    aside{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:18px;
+      text-align:center;
     }
 
     .avatar{
-      width:120px;height:120px;border-radius:999px;display:grid;place-items:center;font-size:42px;font-weight:800;background:linear-gradient(135deg,var(--accent1),var(--accent2));box-shadow:0 8px 30px rgba(2,6,23,0.6);
+      width:120px;
+      height:120px;
+      border-radius:50%;
+      background:linear-gradient(135deg,var(--accent1),var(--accent2));
+      display:grid;
+      place-items:center;
+      font-size:46px;
+      font-weight:900;
+      box-shadow:0 20px 50px rgba(0,0,0,.5);
     }
 
-    .preview p{margin:0;color:rgba(230,238,248,0.8);text-align:center}
+    .clock{
+      font-size:14px;
+      opacity:.7;
+    }
 
-    footer{margin-top:18px;font-size:13px;color:rgba(230,238,248,0.6)}
+    footer{
+      margin-top:18px;
+      font-size:13px;
+      opacity:.6;
+    }
 
-    /* floating blobs */
-    .blobs{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:0}
-    .blob{position:absolute;border-radius:999px;filter:blur(40px);opacity:0.12}
-    .blob.a{width:420px;height:420px;background:linear-gradient(90deg,var(--accent1),var(--accent2));left:-260px;top:-120px}
-    .blob.b{width:300px;height:300px;background:linear-gradient(90deg,#06b6d4,#7c3aed);right:-160px;bottom:-180px}
-
-    /* responsive */
-    @media (max-width:920px){
-      .stage{grid-template-columns:1fr;}
+    @media(max-width:900px){
+      .container{grid-template-columns:1fr}
       h1{font-size:48px}
-      .avatar{width:96px;height:96px;font-size:34px}
     }
   </style>
 </head>
+
 <body>
-  <div class="blobs" aria-hidden>
-    <div class="blob a"></div>
-    <div class="blob b"></div>
-  </div>
 
-  <div class="stage">
-    <div class="card hero">
-      <div class="name-wrap">
-        <h1 id="name">Mayank</h1>
-        <div class="pill">Creative DevOps • Cloud</div>
-      </div>
-      <p class="tagline">A small interactive splash page — pretty, fast, and keyboard-friendly.</p>
+  <div class="container">
 
-      <div class="typewriter" id="type"></div>
+    <!-- LEFT -->
+    <section class="card">
+      <h1 id="name">Mayank</h1>
+      <div class="subtitle">DevOps • Cloud • Automation</div>
 
-      <div class="meta">
-        <div class="pill">Mumbai, India</div>
-        <div class="pill">Docker • AWS • Terraform</div>
-        <div class="pill">20 yrs • Lifelong learner</div>
+      <div class="type" id="type"></div>
+
+      <div class="badges">
+        <div class="badge">AWS • Azure</div>
+        <div class="badge">Docker • Terraform</div>
+        <div class="badge">CI/CD • Jenkins</div>
+        <div class="badge">India 🇮🇳</div>
       </div>
 
       <div class="actions">
-        <button class="btn" id="copyBtn">Copy Name</button>
-        <button class="ghost" id="themeBtn">Toggle Motion</button>
+        <button class="primary" id="copyBtn">Copy Name</button>
+        <button class="secondary" id="toggleBtn">Toggle Motion</button>
       </div>
 
-      <footer>Tip: Press <kbd>c</kbd> to copy, <kbd>t</kbd> to toggle motion.</footer>
-    </div>
+      <footer>
+        Shortcuts: <kbd>C</kbd> copy · <kbd>T</kbd> toggle motion
+      </footer>
+    </section>
 
-    <aside class="preview card" aria-label="preview">
+    <!-- RIGHT -->
+    <aside class="card">
       <div class="avatar" id="avatar">M</div>
-      <p id="previewText">Hello — I am <strong>Mayank</strong>. Click copy to use my name, or press the keyboard shortcuts.</p>
-      <small style="opacity:0.6">This is a minimal, single-file page. Customize freely.</small>
+      <p>Hello 👋 I design reliable cloud systems and love clean automation.</p>
+      <div class="clock" id="clock"></div>
     </aside>
+
   </div>
 
-  <script>
-    // typewriter
-    const phrases = [
-      'I build reliable cloud pipelines.',
-      'I dockerize apps and automate infra.',
-      'I learn daily and ship often.'
-    ];
-    let i=0,j=0;let forward=true;let paused=false;
-    const el = document.getElementById('type');
-    function tick(){
-      if(paused) return;
-      const str = phrases[i];
-      if(forward){
-        j++;
-        if(j>str.length){ forward=false; setTimeout(tick,1200); return; }
-      } else {
-        j--;
-        if(j<0){ forward=true; i=(i+1)%phrases.length; setTimeout(tick,300); return; }
-      }
-      el.textContent = str.slice(0,j);
-      setTimeout(tick, forward?80:40);
-    }
-    tick();
+<script>
+  /* TYPEWRITER */
+  const lines = [
+    "Building scalable cloud infrastructure.",
+    "Automating deployments with CI/CD.",
+    "Learning every day. Shipping often."
+  ];
+  let l=0,c=0,dir=1;
+  const t=document.getElementById("type");
 
-    // find avatar initial from name
-    const name = document.getElementById('name').textContent.trim();
-    document.getElementById('avatar').textContent = name.charAt(0).toUpperCase();
+  function type(){
+    t.textContent = lines[l].slice(0,c);
+    c+=dir;
+    if(c>lines[l].length+10){dir=-1}
+    if(c<0){dir=1;l=(l+1)%lines.length}
+    setTimeout(type, dir>0?70:40);
+  }
+  type();
 
-    // copy name
-    const copyBtn = document.getElementById('copyBtn');
-    copyBtn.addEventListener('click', async ()=>{
-      try{ await navigator.clipboard.writeText(name); copyBtn.textContent='Copied!'; setTimeout(()=>copyBtn.textContent='Copy Name',1200);}catch(e){alert('Copy failed: '+e)}
-    });
+  /* AVATAR INITIAL */
+  const nm=document.getElementById("name").textContent;
+  document.getElementById("avatar").textContent=nm[0];
 
-    // keyboard shortcuts
-    document.addEventListener('keydown',(e)=>{
-      if(e.key==='c' || e.key==='C'){ copyBtn.click(); }
-      if(e.key==='t' || e.key==='T'){ toggleMotion(); }
-    });
+  /* COPY */
+  document.getElementById("copyBtn").onclick=async()=>{
+    await navigator.clipboard.writeText(nm);
+    event.target.textContent="Copied ✔";
+    setTimeout(()=>event.target.textContent="Copy Name",1200);
+  };
 
-    // motion toggle
-    let motionOn = true;
-    const themeBtn = document.getElementById('themeBtn');
-    function toggleMotion(){ motionOn=!motionOn; paused = !motionOn; document.querySelector('.blobs').style.display = motionOn? 'block':'none'; themeBtn.textContent = motionOn? 'Toggle Motion':'Toggle Motion'; }
-    themeBtn.addEventListener('click', toggleMotion);
+  /* CLOCK */
+  function clock(){
+    const d=new Date();
+    document.getElementById("clock").textContent=
+      d.toLocaleTimeString()+" · "+d.toDateString();
+  }
+  clock(); setInterval(clock,1000);
 
-    // interactive color on click
-    document.getElementById('name').addEventListener('click',()=>{
-      document.documentElement.style.setProperty('--accent1', '#ff6b6b');
-      document.documentElement.style.setProperty('--accent2', '#ffd166');
-    });
-  </script>
+  /* MOTION TOGGLE */
+  let motion=true;
+  document.getElementById("toggleBtn").onclick=()=>{
+    motion=!motion;
+    document.body.style.animation = motion ? "" : "none";
+  };
+
+  document.addEventListener("keydown",e=>{
+    if(e.key.toLowerCase()=="c") copyBtn.click();
+    if(e.key.toLowerCase()=="t") toggleBtn.click();
+  });
+</script>
+
 </body>
 </html>
