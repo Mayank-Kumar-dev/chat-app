@@ -1,256 +1,130 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Mayank — DevOps & Cloud</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mayank | DevOps Terminal</title>
 
   <style>
-    :root{
-      --bg1:#0b1220;
-      --bg2:#050a14;
-      --accent1:#7c3aed;
-      --accent2:#06b6d4;
-      --glass: rgba(255,255,255,0.06);
-      --border: rgba(255,255,255,0.1);
-      --text:#e6eef8;
+    body {
+      margin: 0;
+      background: #0d1117;
+      color: #c9d1d9;
+      font-family: "Fira Code", monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
 
-    *{box-sizing:border-box}
-    html,body{
-      height:100%;
-      margin:0;
-      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto;
+    .terminal {
+      width: 90%;
+      max-width: 820px;
+      background: #010409;
+      border-radius: 10px;
+      box-shadow: 0 25px 80px rgba(0,0,0,0.6);
+      overflow: hidden;
     }
 
-    body{
-      background:
-        radial-gradient(900px 500px at 10% 10%, rgba(124,58,237,.18), transparent 40%),
-        radial-gradient(700px 400px at 90% 90%, rgba(6,182,212,.18), transparent 45%),
-        linear-gradient(180deg,var(--bg1),var(--bg2));
-      color:var(--text);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:32px;
-      overflow:hidden;
+    .header {
+      background: #161b22;
+      padding: 10px 14px;
+      display: flex;
+      gap: 8px;
     }
 
-    .container{
-      max-width:1000px;
-      width:100%;
-      display:grid;
-      grid-template-columns:1fr 420px;
-      gap:28px;
-      animation: fadeUp .9s ease forwards;
+    .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .red { background: #ff5f56; }
+    .yellow { background: #ffbd2e; }
+    .green { background: #27c93f; }
+
+    .body {
+      padding: 18px;
+      font-size: 15px;
+      line-height: 1.6;
     }
 
-    @keyframes fadeUp{
-      from{opacity:0;transform:translateY(20px)}
-      to{opacity:1;transform:none}
+    .prompt {
+      color: #58a6ff;
     }
 
-    .card{
-      background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
-      border:1px solid var(--border);
-      border-radius:18px;
-      padding:36px;
-      backdrop-filter: blur(10px);
-      box-shadow:0 30px 60px rgba(0,0,0,.4);
+    .cmd {
+      color: #7ee787;
     }
 
-    h1{
-      margin:0;
-      font-size:64px;
-      font-weight:900;
-      letter-spacing:-1px;
-      background:linear-gradient(90deg,var(--accent1),var(--accent2));
-      -webkit-background-clip:text;
-      background-clip:text;
-      color:transparent;
+    .cursor {
+      display: inline-block;
+      width: 8px;
+      background: #c9d1d9;
+      margin-left: 4px;
+      animation: blink 1s infinite;
     }
 
-    .subtitle{
-      margin-top:10px;
-      font-size:18px;
-      color:rgba(230,238,248,.85);
+    @keyframes blink {
+      0%,50% { opacity: 1 }
+      51%,100% { opacity: 0 }
     }
 
-    .type{
-      margin-top:18px;
-      font-weight:600;
-      color:#fff;
-      min-height:24px;
-    }
-
-    .badges{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-top:22px;
-    }
-
-    .badge{
-      padding:8px 14px;
-      border-radius:999px;
-      background:var(--glass);
-      border:1px solid var(--border);
-      font-size:13px;
-      transition:.2s;
-    }
-    .badge:hover{transform:translateY(-2px)}
-
-    .actions{
-      margin-top:26px;
-      display:flex;
-      gap:12px;
-    }
-
-    button{
-      padding:12px 18px;
-      border-radius:12px;
-      font-weight:700;
-      cursor:pointer;
-      border:0;
-    }
-
-    .primary{
-      background:linear-gradient(90deg,var(--accent1),var(--accent2));
-      color:#fff;
-      box-shadow:0 10px 30px rgba(124,58,237,.3);
-    }
-
-    .secondary{
-      background:transparent;
-      color:var(--text);
-      border:1px solid var(--border);
-    }
-
-    aside{
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      gap:18px;
-      text-align:center;
-    }
-
-    .avatar{
-      width:120px;
-      height:120px;
-      border-radius:50%;
-      background:linear-gradient(135deg,var(--accent1),var(--accent2));
-      display:grid;
-      place-items:center;
-      font-size:46px;
-      font-weight:900;
-      box-shadow:0 20px 50px rgba(0,0,0,.5);
-    }
-
-    .clock{
-      font-size:14px;
-      opacity:.7;
-    }
-
-    footer{
-      margin-top:18px;
-      font-size:13px;
-      opacity:.6;
-    }
-
-    @media(max-width:900px){
-      .container{grid-template-columns:1fr}
-      h1{font-size:48px}
-    }
+    .muted { color: #8b949e; }
   </style>
 </head>
 
 <body>
 
-  <div class="container">
-
-    <!-- LEFT -->
-    <section class="card">
-      <h1 id="name">Mayank</h1>
-      <div class="subtitle">DevOps • Cloud • Automation</div>
-
-      <div class="type" id="type"></div>
-
-      <div class="badges">
-        <div class="badge">AWS • Azure</div>
-        <div class="badge">Docker • Terraform</div>
-        <div class="badge">CI/CD • Jenkins</div>
-        <div class="badge">India 🇮🇳</div>
-      </div>
-
-      <div class="actions">
-        <button class="primary" id="copyBtn">Copy Name</button>
-        <button class="secondary" id="toggleBtn">Toggle Motion</button>
-      </div>
-
-      <footer>
-        Shortcuts: <kbd>C</kbd> copy · <kbd>T</kbd> toggle motion
-      </footer>
-    </section>
-
-    <!-- RIGHT -->
-    <aside class="card">
-      <div class="avatar" id="avatar">M</div>
-      <p>Hello 👋 I design reliable cloud systems and love clean automation.</p>
-      <div class="clock" id="clock"></div>
-    </aside>
-
+<div class="terminal">
+  <div class="header">
+    <div class="dot red"></div>
+    <div class="dot yellow"></div>
+    <div class="dot green"></div>
   </div>
 
+  <div class="body" id="terminal"></div>
+</div>
+
 <script>
-  /* TYPEWRITER */
+  const terminal = document.getElementById("terminal");
+
   const lines = [
-    "Building scalable cloud infrastructure.",
-    "Automating deployments with CI/CD.",
-    "Learning every day. Shipping often."
+    { t: "mayank@cloud:~$ ", c: "prompt" },
+    { t: "whoami", c: "cmd" },
+    { t: "\nMayank Kumar\n", c: "" },
+
+    { t: "mayank@cloud:~$ ", c: "prompt" },
+    { t: "skills", c: "cmd" },
+    { t: "\n• AWS • Azure • Docker • Terraform\n• CI/CD • Jenkins • Git • Linux\n\n", c: "" },
+
+    { t: "mayank@cloud:~$ ", c: "prompt" },
+    { t: "status", c: "cmd" },
+    { t: "\nDevOps Engineer | Cloud Enthusiast\nActively building & learning 🚀\n\n", c: "" },
+
+    { t: "mayank@cloud:~$ ", c: "prompt" }
   ];
-  let l=0,c=0,dir=1;
-  const t=document.getElementById("type");
 
-  function type(){
-    t.textContent = lines[l].slice(0,c);
-    c+=dir;
-    if(c>lines[l].length+10){dir=-1}
-    if(c<0){dir=1;l=(l+1)%lines.length}
-    setTimeout(type, dir>0?70:40);
+  let i = 0;
+
+  function typeLine() {
+    if (i >= lines.length) return;
+
+    const span = document.createElement("span");
+    span.className = lines[i].c;
+    terminal.appendChild(span);
+
+    let j = 0;
+    const text = lines[i].t;
+
+    const typer = setInterval(() => {
+      span.textContent += text[j];
+      j++;
+      if (j === text.length) {
+        clearInterval(typer);
+        i++;
+        terminal.appendChild(document.createElement("br"));
+        setTimeout(typeLine, 400);
+      }
+    }, 40);
   }
-  type();
 
-  /* AVATAR INITIAL */
-  const nm=document.getElementById("name").textContent;
-  document.getElementById("avatar").textContent=nm[0];
-
-  /* COPY */
-  document.getElementById("copyBtn").onclick=async()=>{
-    await navigator.clipboard.writeText(nm);
-    event.target.textContent="Copied ✔";
-    setTimeout(()=>event.target.textContent="Copy Name",1200);
-  };
-
-  /* CLOCK */
-  function clock(){
-    const d=new Date();
-    document.getElementById("clock").textContent=
-      d.toLocaleTimeString()+" · "+d.toDateString();
-  }
-  clock(); setInterval(clock,1000);
-
-  /* MOTION TOGGLE */
-  let motion=true;
-  document.getElementById("toggleBtn").onclick=()=>{
-    motion=!motion;
-    document.body.style.animation = motion ? "" : "none";
-  };
-
-  document.addEventListener("keydown",e=>{
-    if(e.key.toLowerCase()=="c") copyBtn.click();
-    if(e.key.toLowerCase()=="t") toggleBtn.click();
-  });
+  typeLine();
 </script>
 
 </body>
