@@ -2,11 +2,12 @@ pipeline {
     agent any
 
     environment {
-        EC2_USER = "unique"
-        EC2_IP   = "3.233.131.221"
+        APP_NAME = "chat-app"
         APP_DIR  = "/opt/chat-app"
         NODE_BIN = "/home/unique/.nvm/versions/node/v24.12.0/bin"
-        SSH_CRED = "aws-ec2-ssh"   // Jenkins Credential ID
+        EC2_USER = "unique"
+        EC2_HOST = "3.233.131.221"
+        SSH_CRED = "aws-ec2-ssh"
     }
 
     stages {
@@ -35,7 +36,7 @@ pipeline {
             steps {
                 sshagent(credentials: ["${SSH_CRED}"]) {
                     sh '''
-                        ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_IP} "whoami && hostname"
+                        ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} "whoami && hostname"
                     '''
                 }
             }
@@ -49,20 +50,18 @@ pipeline {
                         rsync -avz --delete \
                           --exclude=.git \
                           --exclude=node_modules \
-                          ./ ${EC2_USER}@${EC2_IP}:${APP_DIR}/
+                          ./ ${EC2_USER}@${EC2_HOST}:${APP_DIR}/
 
                         echo "===== START APP ON EC2 ====="
-                        ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_IP} << EOF
+                        ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} << EOF
                           set -e
                           export PATH=${NODE_BIN}:\$PATH
                           cd ${APP_DIR}
 
-                          echo "NODE:"
-                          node -v
-                          npm -v
+                          npm install
 
-                          pm2 delete chat-app || true
-                          pm2 start app.js --name chat-app
+                          pm2 delete ${APP_NAME} || true
+                          pm2 start app.js --name ${APP_NAME}
                         EOF
                     '''
                 }
@@ -72,7 +71,7 @@ pipeline {
 
     post {
         success {
-            echo "✅ Deployment successful"
+            echo "✅ Deployment completed successfully"
         }
         failure {
             echo "❌ Deployment failed"
