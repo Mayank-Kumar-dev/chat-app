@@ -2,142 +2,164 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>3D Car Viewer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chat App | Powered by Mayank</title>
+
   <style>
-    body {
-      margin: 0;
-      overflow: hidden;
-      background: #111;
+    :root {
+      --primary: #6c63ff;
+      --secondary: #00c9a7;
+      --dark: #0f172a;
+      --light: #f8fafc;
     }
-    #info {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      color: white;
-      font-family: Arial, sans-serif;
-      z-index: 1;
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--light);
+    }
+
+    .container {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      border-radius: 18px;
+      padding: 50px 40px;
+      width: 100%;
+      max-width: 520px;
+      text-align: center;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1 {
+      font-size: 2.4rem;
+      margin-bottom: 10px;
+    }
+
+    h1 span {
+      color: var(--secondary);
+    }
+
+    p {
+      font-size: 1rem;
+      opacity: 0.9;
+      margin-bottom: 30px;
+    }
+
+    .status {
+      background: rgba(0, 201, 167, 0.15);
+      border: 1px solid var(--secondary);
+      color: var(--secondary);
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-weight: 600;
+      margin-bottom: 30px;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-bottom: 35px;
+    }
+
+    .feature {
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 18px;
+      transition: transform 0.3s ease, background 0.3s ease;
+    }
+
+    .feature:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .feature h3 {
+      font-size: 1.05rem;
+      margin-bottom: 6px;
+      color: var(--secondary);
+    }
+
+    .feature p {
+      font-size: 0.9rem;
+      opacity: 0.85;
+    }
+
+    .footer {
+      font-size: 0.85rem;
+      opacity: 0.75;
+      margin-top: 20px;
+    }
+
+    .footer span {
+      color: var(--secondary);
+      font-weight: 600;
+    }
+
+    @media (max-width: 520px) {
+      .features {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
+
 <body>
-<div id="info">3D Car Viewer (Drag to rotate, Scroll to zoom)</div>
+  <div class="container">
+    <h1>Chat<span>App</span></h1>
+    <p>Fast • Secure • Real-Time Messaging Platform</p>
 
-<!-- Three.js -->
-<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
+    <div class="status">
+      ✅ Application is running successfully
+    </div>
 
-<!-- dat.GUI -->
-<script src="https://cdn.jsdelivr.net/npm/dat.gui@0.7.9/build/dat.gui.min.js"></script>
+    <div class="features">
+      <div class="feature">
+        <h3>⚡ Fast</h3>
+        <p>Optimized Node.js backend with PM2 process manager.</p>
+      </div>
 
-<script>
-  // Scene
-  const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x222222);
+      <div class="feature">
+        <h3>🔐 Secure</h3>
+        <p>Production-grade deployment with user-level isolation.</p>
+      </div>
 
-  // Camera
-  const camera = new THREE.PerspectiveCamera(
-    60,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000
-  );
-  camera.position.set(5, 3, 8);
+      <div class="feature">
+        <h3>☁️ CI/CD</h3>
+        <p>Automated Jenkins build & deployment pipeline.</p>
+      </div>
 
-  // Renderer
-  const renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  document.body.appendChild(renderer.domElement);
+      <div class="feature">
+        <h3>📈 Scalable</h3>
+        <p>Ready for future scaling and cloud migration.</p>
+      </div>
+    </div>
 
-  // Controls
-  const controls = new THREE.OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true;
-
-  // Lights
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-  scene.add(ambientLight);
-
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-  directionalLight.position.set(5, 10, 7);
-  scene.add(directionalLight);
-
-  // Ground
-  const ground = new THREE.Mesh(
-    new THREE.PlaneGeometry(50, 50),
-    new THREE.MeshStandardMaterial({ color: 0x333333 })
-  );
-  ground.rotation.x = -Math.PI / 2;
-  ground.position.y = -0.5;
-  scene.add(ground);
-
-  // Car Group
-  const car = new THREE.Group();
-  scene.add(car);
-
-  // Car Body
-  const bodyMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-  const body = new THREE.Mesh(
-    new THREE.BoxGeometry(3, 0.8, 1.5),
-    bodyMaterial
-  );
-  body.position.y = 0.4;
-  car.add(body);
-
-  // Car Top
-  const top = new THREE.Mesh(
-    new THREE.BoxGeometry(1.5, 0.6, 1.2),
-    bodyMaterial
-  );
-  top.position.set(0, 0.9, 0);
-  car.add(top);
-
-  // Wheels
-  const wheelMaterial = new THREE.MeshStandardMaterial({ color: 0x000000 });
-  const wheelGeometry = new THREE.CylinderGeometry(0.35, 0.35, 0.4, 32);
-
-  function createWheel(x, z) {
-    const wheel = new THREE.Mesh(wheelGeometry, wheelMaterial);
-    wheel.rotation.z = Math.PI / 2;
-    wheel.position.set(x, 0.1, z);
-    car.add(wheel);
-  }
-
-  createWheel(1.2, 0.8);
-  createWheel(-1.2, 0.8);
-  createWheel(1.2, -0.8);
-  createWheel(-1.2, -0.8);
-
-  // GUI
-  const gui = new dat.GUI();
-  const settings = {
-    color: "#ff0000",
-    rotationY: 0
-  };
-
-  gui.addColor(settings, "color").name("Car Color").onChange(value => {
-    bodyMaterial.color.set(value);
-  });
-
-  gui.add(settings, "rotationY", -Math.PI, Math.PI)
-     .name("Rotate Car")
-     .onChange(value => {
-       car.rotation.y = value;
-     });
-
-  // Resize
-  window.addEventListener("resize", () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-  });
-
-  // Animate
-  function animate() {
-    requestAnimationFrame(animate);
-    controls.update();
-    renderer.render(scene, camera);
-  }
-
-  animate();
-</script>
+    <div class="footer">
+      Deployed by <span>Mayank</span> • Powered by <span>Node.js</span> & <span>PM2</span>
+    </div>
+  </div>
 </body>
 </html>
