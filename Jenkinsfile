@@ -22,7 +22,7 @@ pipeline {
             steps {
                 sh '''
                     set -e
-                    echo "===== NODE VERSION ====="
+                    echo "===== NODE ====="
                     node -v
                     npm -v
 
@@ -46,22 +46,21 @@ pipeline {
             steps {
                 sshagent(credentials: ["${SSH_CRED}"]) {
                     sh '''
-                        echo "===== COPY CODE TO EC2 ====="
-                        rsync -avz --delete \
+                        echo "===== SYNC CODE TO EC2 ====="
+                        rsync -avz \
                           --exclude=.git \
                           --exclude=node_modules \
+                          --exclude=.env \
                           ./ ${EC2_USER}@${EC2_HOST}:${APP_DIR}/
 
-                        echo "===== START APP ON EC2 ====="
+                        echo "===== RESTART APP ====="
                         ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} << EOF
                           set -e
                           export PATH=${NODE_BIN}:\$PATH
                           cd ${APP_DIR}
 
                           npm install
-
-                          pm2 delete ${APP_NAME} || true
-                          pm2 start app.js --name ${APP_NAME}
+                          pm2 restart ${APP_NAME} || pm2 start app.js --name ${APP_NAME}
                         EOF
                     '''
                 }
@@ -71,10 +70,10 @@ pipeline {
 
     post {
         success {
-            echo "✅ Deployment completed successfully"
+            echo "✅ DEPLOYMENT SUCCESSFUL"
         }
         failure {
-            echo "❌ Deployment failed"
+            echo "❌ DEPLOYMENT FAILED"
         }
     }
 }
