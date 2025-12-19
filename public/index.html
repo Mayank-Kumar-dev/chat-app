@@ -3,163 +3,176 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chat App | Powered by Mayank</title>
+  <title>ChatApp | Live</title>
 
   <style>
-    :root {
-      --primary: #6c63ff;
-      --secondary: #00c9a7;
-      --dark: #0f172a;
-      --light: #f8fafc;
-    }
-
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      font-family: "Poppins", sans-serif;
     }
 
     body {
       min-height: 100vh;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      background: radial-gradient(circle at top, #1e293b, #020617);
+      color: #e5e7eb;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--light);
+      flex-direction: column;
     }
 
-    .container {
-      background: rgba(15, 23, 42, 0.85);
-      backdrop-filter: blur(12px);
-      border-radius: 18px;
-      padding: 50px 40px;
-      width: 100%;
-      max-width: 520px;
+    header {
+      padding: 50px 20px;
       text-align: center;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
-      animation: fadeIn 1s ease-in-out;
     }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    header h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #38bdf8, #22c55e);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
-    h1 {
-      font-size: 2.4rem;
-      margin-bottom: 10px;
-    }
-
-    h1 span {
-      color: var(--secondary);
-    }
-
-    p {
-      font-size: 1rem;
-      opacity: 0.9;
-      margin-bottom: 30px;
-    }
-
-    .status {
-      background: rgba(0, 201, 167, 0.15);
-      border: 1px solid var(--secondary);
-      color: var(--secondary);
-      padding: 12px 16px;
-      border-radius: 10px;
-      font-weight: 600;
-      margin-bottom: 30px;
-    }
-
-    .features {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-      margin-bottom: 35px;
-    }
-
-    .feature {
-      background: rgba(255, 255, 255, 0.06);
-      border-radius: 12px;
-      padding: 18px;
-      transition: transform 0.3s ease, background 0.3s ease;
-    }
-
-    .feature:hover {
-      transform: translateY(-5px);
-      background: rgba(255, 255, 255, 0.12);
-    }
-
-    .feature h3 {
-      font-size: 1.05rem;
-      margin-bottom: 6px;
-      color: var(--secondary);
-    }
-
-    .feature p {
-      font-size: 0.9rem;
+    header p {
+      margin-top: 12px;
+      font-size: 1.1rem;
       opacity: 0.85;
     }
 
-    .footer {
-      font-size: 0.85rem;
-      opacity: 0.75;
-      margin-top: 20px;
+    .status {
+      margin: 30px auto;
+      padding: 14px 26px;
+      width: fit-content;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #22c55e, #4ade80);
+      color: #022c22;
+      font-weight: 600;
+      box-shadow: 0 0 25px rgba(34, 197, 94, 0.4);
     }
 
-    .footer span {
-      color: var(--secondary);
+    main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 30px;
+      padding: 40px 60px;
+      max-width: 1200px;
+      margin: auto;
+      width: 100%;
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+      border-radius: 18px;
+      padding: 30px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(56,189,248,0.15), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+    }
+
+    .card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 12px;
+      color: #38bdf8;
+    }
+
+    .card p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      opacity: 0.85;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.85rem;
+      opacity: 0.75;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    footer span {
+      color: #22c55e;
       font-weight: 600;
     }
 
-    @media (max-width: 520px) {
-      .features {
-        grid-template-columns: 1fr;
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 2.2rem;
+      }
+
+      main {
+        padding: 30px 20px;
       }
     }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <h1>Chat<span>App</span></h1>
-    <p>Fast • Secure • Real-Time Messaging Platform</p>
 
-    <div class="status">
-      ✅ Application is running successfully
-    </div>
+  <header>
+    <h1>ChatApp</h1>
+    <p>Real-time conversations. Built for speed & reliability.</p>
+  </header>
 
-    <div class="features">
-      <div class="feature">
-        <h3>⚡ Fast</h3>
-        <p>Optimized Node.js backend with PM2 process manager.</p>
-      </div>
-
-      <div class="feature">
-        <h3>🔐 Secure</h3>
-        <p>Production-grade deployment with user-level isolation.</p>
-      </div>
-
-      <div class="feature">
-        <h3>☁️ CI/CD</h3>
-        <p>Automated Jenkins build & deployment pipeline.</p>
-      </div>
-
-      <div class="feature">
-        <h3>📈 Scalable</h3>
-        <p>Ready for future scaling and cloud migration.</p>
-      </div>
-    </div>
-
-    <div class="footer">
-      Deployed by <span>Mayank</span> • Powered by <span>Node.js</span> & <span>PM2</span>
-    </div>
+  <div class="status">
+    🟢 Server is live & running
   </div>
+
+  <main>
+    <div class="card">
+      <h3>⚡ High Performance</h3>
+      <p>
+        Optimized Node.js architecture with PM2 ensuring
+        zero-downtime restarts and efficient resource usage.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>🔒 Secure by Design</h3>
+      <p>
+        Runs under a dedicated system user with proper permissions,
+        ensuring production-level security and isolation.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>🚀 CI/CD Ready</h3>
+      <p>
+        Fully automated Jenkins pipeline that builds on the CI server
+        and deploys seamlessly to the application server.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>📊 Scalable Architecture</h3>
+      <p>
+        Designed to scale horizontally and integrate easily with cloud
+        services and load balancers.
+      </p>
+    </div>
+  </main>
+
+  <footer>
+    Deployed by <span>Mayank</span> • Powered by <span>Node.js</span> & <span>PM2</span>
+  </footer>
+
 </body>
 </html>
