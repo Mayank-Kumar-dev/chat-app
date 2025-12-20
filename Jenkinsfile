@@ -52,24 +52,21 @@ pipeline {
 
                       echo "===== RESTART APP ON EC2 ====="
 
-                      ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} << 'EOF'
-                        set -e
-
-                        # LOAD NVM
-                        export NVM_DIR="$HOME/.nvm"
-                        [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+                      ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} "
+                        export NVM_DIR=\\\"\\$HOME/.nvm\\\"
+                        [ -s \\\"\\$NVM_DIR/nvm.sh\\\" ] && . \\\"\\$NVM_DIR/nvm.sh\\\"
 
                         node -v
                         npm -v
 
-                        cd /opt/chat-app
+                        cd ${APP_DIR}
                         npm install --production
 
-                        pm2 delete chat-app || true
-                        pm2 start app.js --name chat-app
+                        pm2 delete ${APP_NAME} || true
+                        pm2 start app.js --name ${APP_NAME}
                         pm2 save
                         pm2 status
-                      EOF
+                      "
                     '''
                 }
             }
