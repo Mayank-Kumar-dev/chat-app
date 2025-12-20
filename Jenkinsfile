@@ -60,7 +60,7 @@ pipeline {
                         npm -v
 
                         cd ${APP_DIR}
-                        npm install --production
+                        
 
                         pm2 delete ${APP_NAME} || true
                         pm2 start app.js --name ${APP_NAME}
