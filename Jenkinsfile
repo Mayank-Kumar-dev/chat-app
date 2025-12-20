@@ -2,12 +2,12 @@ pipeline {
     agent any
 
     environment {
-        APP_NAME = "chat-app"
-        APP_DIR  = "/opt/chat-app"
-        NODE_BIN = "/home/unique/.nvm/versions/node/v24.12.0/bin"
         EC2_USER = "unique"
         EC2_HOST = "3.233.131.221"
-        SSH_CRED = "aws-ec2-ssh"
+        APP_DIR  = "/opt/chat-app"
+        NODE_BIN = "/home/unique/.nvm/versions/node/v24.12.0/bin"
+        APP_NAME = "chat-app"
+        SSH_CRED = "aws-ec2-ssh"   // Jenkins SSH credential ID
     }
 
     stages {
@@ -22,7 +22,7 @@ pipeline {
             steps {
                 sh '''
                     set -e
-                    echo "===== NODE ====="
+                    echo "===== NODE VERSION ====="
                     node -v
                     npm -v
 
@@ -34,7 +34,7 @@ pipeline {
 
         stage('Test SSH Connection') {
             steps {
-                sshagent(credentials: ["${SSH_CRED}"]) {
+                sshagent(credentials: [SSH_CRED]) {
                     sh '''
                         ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} "whoami && hostname"
                     '''
@@ -44,8 +44,10 @@ pipeline {
 
         stage('Deploy to AWS EC2') {
             steps {
-                sshagent(credentials: ["${SSH_CRED}"]) {
+                sshagent(credentials: [SSH_CRED]) {
                     sh '''
+                        set -e
+
                         echo "===== SYNC CODE TO EC2 ====="
                         rsync -avz \
                           --exclude=.git \
@@ -53,14 +55,15 @@ pipeline {
                           --exclude=.env \
                           ./ ${EC2_USER}@${EC2_HOST}:${APP_DIR}/
 
-                        echo "===== RESTART APP ====="
-                        ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} << EOF
+                        echo "===== RESTART APP ON EC2 ====="
+                        ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} << 'EOF'
                           set -e
-                          export PATH=${NODE_BIN}:\$PATH
-                          cd ${APP_DIR}
+                          export PATH=/home/unique/.nvm/versions/node/v24.12.0/bin:$PATH
+
+                          cd /opt/chat-app
 
                           npm install
-                          pm2 restart ${APP_NAME} || pm2 start app.js --name ${APP_NAME}
+                          pm2 restart chat-app || pm2 start app.js --name chat-app
                         EOF
                     '''
                 }
@@ -70,10 +73,10 @@ pipeline {
 
     post {
         success {
-            echo "✅ DEPLOYMENT SUCCESSFUL"
+            echo "✅ Deployment successful"
         }
         failure {
-            echo "❌ DEPLOYMENT FAILED"
+            echo "❌ Deployment failed"
         }
     }
 }
