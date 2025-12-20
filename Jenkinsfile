@@ -20,11 +20,8 @@ pipeline {
         stage('Build on Jenkins') {
             steps {
                 sh '''
-                  echo "===== NODE & NPM VERSION ====="
                   node -v
                   npm -v
-
-                  echo "===== INSTALL DEPENDENCIES ====="
                   npm install
                 '''
             }
@@ -57,8 +54,15 @@ pipeline {
 
                       ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} << 'EOF'
                         set -e
-                        cd /opt/chat-app
 
+                        # LOAD NVM
+                        export NVM_DIR="$HOME/.nvm"
+                        [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+
+                        node -v
+                        npm -v
+
+                        cd /opt/chat-app
                         npm install --production
 
                         pm2 delete chat-app || true
